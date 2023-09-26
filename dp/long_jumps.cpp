@@ -1,19 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 int long_jumps(vector<int> const&& nums) {
-	vector<int> dp(nums.size());
-	for (int i = nums.size() - 1; i > 0; i--) {
-		int j = i;
-		int sum = 0;
-		while (sum + nums[j] > dp[j] && j < nums.size()) {
-			sum += nums[j];
-			dp[j] = sum;
-			j += nums[j];
-		}
+	vector<int> dp(nums.size(), 0);
+	for (int i = nums.size() - 1; i >= 0; i--) {
+		if (i + nums[i] >= dp.size()) dp[i] = nums[i];
+		else dp[i] = nums[i] + dp[i + nums[i]];
 	}
 	return *max_element(dp.begin(), dp.end());
 }
@@ -26,7 +22,6 @@ void test() {
 }
 
 int main() {
-	// test();
 	int t, n, tmp;
 	cin >> t;
 	while (t) {
